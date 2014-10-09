@@ -1,0 +1,18 @@
+22:52:00 **** Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../RTSPCommon.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"RTSPCommon.d" -MT"RTSPCommon.d" -o "RTSPCommon.o" "../RTSPCommon.cpp"
+Finished building: ../RTSPCommon.cpp
+ 
+Building target: RtspServer
+Invoking: GCC C++ Linker
+g++  -o "RtspServer"  ./RTSPCommon.o   
+/usr/lib/gcc/i686-redhat-linux/4.8.2/../../../crt1.o：在函数‘_start’中：
+(.text+0x18)：对‘main’未定义的引用
+./RTSPCommon.o：在函数‘parseRangeParam(char const*, double&, double&, char*&, char*&, unsigned char&)’中：
+/root/source_server/RtspServer/Debug/../RTSPCommon.cpp:227：对‘Locale::Locale(char const*, LocaleCategory)’未定义的引用
+/root/source_server/RtspServer/Debug/../RTSPCommon.cpp:270：对‘Locale::~Locale()’未定义的引用
+/root/source_server/RtspServer/Debug/../RTSPCommon.cpp:270：对‘Locale::~Locale()’未定义的引用
+collect2: 错误：ld 返回 1
+make: *** [RtspServer] 错误 1
