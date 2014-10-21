@@ -52,12 +52,24 @@ protected:
 		unsigned extraDataSize);
 	virtual void handleHTTPCmd_StreamingGET(char const* urlSuffix, char const* fullRequestStr);
 
+public:
+	void handleRequestBytes(int newBytesRead);
+
 protected:
 	RTSPServer& fOurServer;
 
 	unsigned char fResponseBuffer[RTSP_BUFFER_SIZE];
+    unsigned char fRequestBuffer[RTSP_BUFFER_SIZE];
+
+	unsigned fRequestBytesAlreadySeen, fRequestBufferBytesLeft;
 
 	char const* fCurrentCSeq;
+
+	unsigned fRecursionCount;
+
+	Boolean fIsActive;
+
+	unsigned char* fLastCRLF;
 };
 
 class RTSPClientSession 

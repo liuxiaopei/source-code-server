@@ -197,11 +197,11 @@
 			Name="ServerMediaSession"
 			>
 			<File
-				RelativePath=".\ServerMediaSession.cpp"
+				RelativePath=".\ServerMediaSession\ServerMediaSession.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ServerMediaSession.h"
+				RelativePath=".\ServerMediaSession\ServerMediaSession.h"
 				>
 			</File>
 		</Filter>

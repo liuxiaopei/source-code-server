@@ -19,7 +19,7 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 // Implementation
 
 #include "RTSPCommon.hh"
-#include "./include/Locale.hh"
+#include "../include/Locale.hh"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

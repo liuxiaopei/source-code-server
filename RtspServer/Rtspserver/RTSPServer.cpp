@@ -11,6 +11,91 @@ void RTSPClientConnection::handleCmd_OPTIONS()
 		fCurrentCSeq, dateHeader(), fOurServer.allowedCommandNames());
 }
 
+void RTSPClientConnection::handleRequestBytes(int newBytesRead) 
+{
+	int numBytesRemaining = 0;
+	++fRecursionCount;
+
+	do 
+	{
+		RTSPClientSession* clientSession = NULL;
+		if (newBytesRead < 0 || (unsigned)newBytesRead > fRequestBufferBytesLeft)
+		{
+#ifdef DEBUG
+			fprintf(stderr, "RTSPClientConnection[%p]::handleRequestBytes() read %d new bytes (of %d); terminating connection!\n", this, newBytesRead, fRequestBufferBytesLeft);
+#endif
+			fIsActive = False;
+			break;
+		}
+
+		Boolean endOfMsg = False;
+		unsigned char* ptr = &fRequestBuffer[fRequestBytesAlreadySeen];
+#ifdef DEBUG
+		ptr[newBytesRead] = '\0';
+		fprintf(stderr, "RTSPClientConnection[%p]::handleRequestBytes() %s %d new bytes:%s\n",
+			this, numBytesRemaining > 0 ? "processing" : "read", newBytesRead, ptr);
+#endif
+	unsigned char* tmpPtr = fLastCRLF + 2;
+	if (tmpPtr < fRequestBuffer)
+	{
+		tmpPtr = fRequestBuffer;
+	}
+
+	//²éÕÒ»»ÐÐ·û.
+	while (tmpPtr < &ptr[newBytesRead - 1])
+	{
+		if (*tmpPtr == '\r' && *(tmpPtr + 1) == '\n')
+		{
+			if (tmpPtr - fLastCRLF == 2)
+			{
+				endOfMsg = True;
+				break;
+			}
+
+			fLastCRLF = tmpPtr;
+		}
+
+		++tmpPtr;
+	}
+
+	fRequestBufferBytesLeft -= newBytesRead;
+	fRequestBytesAlreadySeen += newBytesRead;
+
+	if (!endOfMsg) break; // subsequent reads will be needed to complete the request
+
+	fRequestBuffer[fRequestBytesAlreadySeen] = '\0';
+	char cmdName[RTSP_PARAM_STRING_MAX];
+	char urlPreSuffix[RTSP_PARAM_STRING_MAX];
+	char urlSuffix[RTSP_PARAM_STRING_MAX];
+	char cseq[RTSP_PARAM_STRING_MAX];
+	char sessionIdStr[RTSP_PARAM_STRING_MAX];
+	unsigned contentLength = 0;
+	fLastCRLF[2] = '\0'; // temporarily, for parsing
+	
+	Boolean parseSucceed = parseRTSPRequestString((char*)fRequestBuffer, fLastCRLF + 2 - fRequestBuffer, 
+						cmdName, sizeof cmdName,
+						urlPreSuffix, sizeof urlPreSuffix,
+						urlSuffix, sizeof urlSuffix,
+						cseq, sizeof cseq,
+						sessionIdStr, sizeof sessionIdStr,
+						contentLength);
+
+	fLastCRLF[2] = '\r'; // restore its value
+	Boolean playAfterSetup = False;
+	
+	if (parseSucceed)
+	{
+#ifdef DEBUG
+		fprintf(stderr, "parseRTSPRequestString() succeeded, returning cmdName \"%s\", urlPreSuffix \"%s\", urlSuffix \"%s\", CSeq \"%s\", Content-Length %u, with %ld bytes following the message.\n", cmdName, urlPreSuffix, urlSuffix, cseq, contentLength, ptr + newBytesRead - (tmpPtr + 2));
+#endif
+	
+
+	}
+
+	} while (1);
+	
+}
+
 void RTSPClientConnection::handleCmd_bad()
 {
 	snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,
