@@ -173,6 +173,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\inet.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\Locale.cpp"
 				>
 			</File>

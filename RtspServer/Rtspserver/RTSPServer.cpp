@@ -1,4 +1,5 @@
 #include "RTSPServer.h"
+#include "../include/inet.h"
 
 char const* RTSPServer::allowedCommandNames() {
 	return "OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER";
@@ -89,7 +90,50 @@ void RTSPClientConnection::handleRequestBytes(int newBytesRead)
 		fprintf(stderr, "parseRTSPRequestString() succeeded, returning cmdName \"%s\", urlPreSuffix \"%s\", urlSuffix \"%s\", CSeq \"%s\", Content-Length %u, with %ld bytes following the message.\n", cmdName, urlPreSuffix, urlSuffix, cseq, contentLength, ptr + newBytesRead - (tmpPtr + 2));
 #endif
 	
+		if (ptr + newBytesRead < tmpPtr + 2 + contentLength)
+		{
+			break;
+		}
 
+		Boolean const  requestIncludedSessionId = sessionIdStr[0] != '\0';
+		if (requestIncludedSessionId)
+		{
+
+		}
+		
+		fCurrentCSeq = cseq;
+		if (strcmp(cmdName, "OPTIONS") == 0)
+		{
+			handleCmd_OPTIONS();
+		}
+		else if (urlPreSuffix[0] == '\0' && urlSuffix[0] == '*' && urlSuffix[1] == '\0')
+		{
+		}
+		else if (strcmp(cmdName, "DESCRIBE"))
+		{
+			handleCmd_DESCRIBE(urlPreSuffix, urlSuffix, (char const*)fRequestBuffer);
+		}
+		else if (strcmp(cmdName, "SETUP"))
+		{
+			if (!requestIncludedSessionId)
+			{
+				 u_int32_t sessionId;
+				 do 
+				 {
+					   sessionId = (u_int32_t)our_random32();
+					   sprintf(sessionIdStr, "%08X", sessionId);
+				 } while (sessionId == 0);
+
+				 clientSession = fOurServer.createNewClientSession(sessionId);
+			}
+
+			if (clientSession != NULL){
+				clientSession->handleCmd_SETUP(this, urlPreSuffix, urlSuffix, (char const*)fRequestBuffer);
+				  playAfterSetup = clientSession->fStreamAfterSETUP;
+			}
+		
+		}
+			
 	}
 
 	} while (1);

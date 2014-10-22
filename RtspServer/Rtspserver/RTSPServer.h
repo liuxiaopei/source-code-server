@@ -14,6 +14,9 @@ public:
 
 	// used to implement "RTSPClientConnection::handleCmd_OPTIONS()"
 	 virtual char const* allowedCommandNames();
+
+protected:
+	virtual RTSPClientSession* createNewClientSession(u_int32_t sessionId);
 };
 
 class RTSPClientConnection
@@ -99,4 +102,7 @@ protected:
 		ServerMediaSubsession* subsession, char const* fullRequestStr);
 	virtual void handleCmd_SET_PARAMETER(RTSPClientConnection* ourClientConnection,
 		ServerMediaSubsession* subsession, char const* fullRequestStr);
+
+public:
+	Boolean fIsMulticast, fStreamAfterSETUP;
 };
