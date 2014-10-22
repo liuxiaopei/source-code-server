@@ -173,7 +173,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\include\inet.h"
+				RelativePath=".\include\GroupsockHelper.hh"
+				>
+			</File>
+			<File
+				RelativePath=".\include\inet.c"
 				>
 			</File>
 			<File
@@ -182,6 +186,10 @@
 			</File>
 			<File
 				RelativePath=".\include\Locale.hh"
+				>
+			</File>
+			<File
+				RelativePath=".\include\NetAddress.hh"
 				>
 			</File>
 			<File

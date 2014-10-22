@@ -6,6 +6,8 @@
 #define RTSP_BUFFER_SIZE 10000 // for incoming requests, and outgoing responses
 #endif
 
+class RTSPClientSession;
+class RTSPClientConnection;
 class RTSPServer	
 {
 public:
@@ -17,6 +19,9 @@ public:
 
 protected:
 	virtual RTSPClientSession* createNewClientSession(u_int32_t sessionId);
+
+protected:
+	friend class RTSPClientConnection;
 };
 
 class RTSPClientConnection
@@ -58,7 +63,10 @@ protected:
 public:
 	void handleRequestBytes(int newBytesRead);
 
+	void resetRequestBuffer();
+
 protected:
+	friend class RTSPServer;
 	RTSPServer& fOurServer;
 
 	unsigned char fResponseBuffer[RTSP_BUFFER_SIZE];
@@ -73,6 +81,10 @@ protected:
 	Boolean fIsActive;
 
 	unsigned char* fLastCRLF;
+
+	int fClientInputSocket, fClientOutputSocket;
+
+	unsigned fBase64RemainderCount; // used for optional RTSP-over-HTTP tunneling (possible values: 0,1,2,3)
 };
 
 class RTSPClientSession 
@@ -89,7 +101,7 @@ protected:
 	virtual void handleCmd_SETUP(RTSPClientConnection* ourClientConnection,
 		char const* urlPreSuffix, char const* urlSuffix, char const* fullRequestStr);
 	virtual void handleCmd_withinSession(RTSPClientConnection* ourClientConnection,
-		char const* cmdName,
+		char const* cmdName,	
 		char const* urlPreSuffix, char const* urlSuffix,
 		char const* fullRequestStr);
 	virtual void handleCmd_TEARDOWN(RTSPClientConnection* ourClientConnection,
@@ -105,4 +117,6 @@ protected:
 
 public:
 	Boolean fIsMulticast, fStreamAfterSETUP;
+	
+	ServerMediaSession* fOurServerMediaSession;
 };
