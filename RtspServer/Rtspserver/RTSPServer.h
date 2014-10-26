@@ -20,6 +20,10 @@ public:
 protected:
 	virtual RTSPClientSession* createNewClientSession(u_int32_t sessionId);
 
+private:
+	  static void incomingConnectionHandlerRTSP(void*, int /*mask*/);
+	  void incomingConnectionHandlerRTSP1();
+
 protected:
 	friend class RTSPClientConnection;
 };

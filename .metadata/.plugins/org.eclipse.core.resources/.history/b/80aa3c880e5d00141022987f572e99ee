@@ -1,0 +1,17 @@
+/*
+ * TCPServer.h
+ *
+ *  Created on: 2014年10月26日
+ *      Author: liuxiaopei
+ */
+
+#ifndef NETSERVER_TCPSERVER_H_
+#define NETSERVER_TCPSERVER_H_
+
+class TCPServer {
+public:
+	TCPServer();
+	virtual ~TCPServer();
+};
+
+#endif /* NETSERVER_TCPSERVER_H_ */

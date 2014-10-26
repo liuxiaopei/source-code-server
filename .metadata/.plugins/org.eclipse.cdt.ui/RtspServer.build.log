@@ -1,21 +1,28 @@
-22:52:00 **** Build of configuration Debug for project RtspServer ****
+20:28:39 **** Incremental Build of configuration Debug for project RtspServer ****
 make all 
-Building file: ../RTSPCommon.cpp
+Building file: ../Rtspserver/RTSPServer.cpp
 Invoking: GCC C++ Compiler
-g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"RTSPCommon.d" -MT"RTSPCommon.d" -o "RTSPCommon.o" "../RTSPCommon.cpp"
-Finished building: ../RTSPCommon.cpp
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:186:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:207:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:208:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+Finished building: ../Rtspserver/RTSPServer.cpp
  
 Building target: RtspServer
 Invoking: GCC C++ Linker
-g++  -o "RtspServer"  ./RTSPCommon.o   
-/usr/lib/gcc/i686-redhat-linux/4.8.2/../../../crt1.o：在函数‘_start’中：
-(.text+0x18)：对‘main’未定义的引用
-./RTSPCommon.o：在函数‘parseRangeParam(char const*, double&, double&, char*&, char*&, unsigned char&)’中：
-/root/source_server/RtspServer/Debug/../RTSPCommon.cpp:227：对‘Locale::Locale(char const*, LocaleCategory)’未定义的引用
-/root/source_server/RtspServer/Debug/../RTSPCommon.cpp:270：对‘Locale::~Locale()’未定义的引用
-/root/source_server/RtspServer/Debug/../RTSPCommon.cpp:270：对‘Locale::~Locale()’未定义的引用
-collect2: 错误：ld 返回 1
+g++  -o "RtspServer"  ./include/Locale.o ./include/inet.o ./include/strDup.o  ./ServerMediaSession/ServerMediaSession.o  ./Rtspserver/RTSPCommon.o ./Rtspserver/RTSPServer.o   
+/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../lib64/crt1.o：在函数‘_start’中：
+/home/abuild/rpmbuild/BUILD/glibc-2.18/csu/../sysdeps/x86_64/start.S:118：对‘main’未定义的引用
+collect2: error: ld returned 1 exit status
 make: *** [RtspServer] 错误 1
 
-22:52:05 Build Finished (took 4s.760ms)
+20:28:40 Build Finished (took 358ms)
 

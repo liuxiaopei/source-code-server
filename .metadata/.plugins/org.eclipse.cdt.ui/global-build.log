@@ -16,3 +16,303 @@ g++  -o "RtspServer"  ./RTSPCommon.o
 /root/source_server/RtspServer/Debug/../RTSPCommon.cpp:270：对‘Locale::~Locale()’未定义的引用
 collect2: 错误：ld 返回 1
 make: *** [RtspServer] 错误 1
+19:23:14 **** Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../include/Locale.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"include/Locale.d" -MT"include/Locale.d" -o "include/Locale.o" "../include/Locale.cpp"
+Finished building: ../include/Locale.cpp
+ 
+Building file: ../include/inet.c
+Invoking: GCC C Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"include/inet.d" -MT"include/inet.d" -o "include/inet.o" "../include/inet.c"
+Finished building: ../include/inet.c
+ 
+Building file: ../include/strDup.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"include/strDup.d" -MT"include/strDup.d" -o "include/strDup.o" "../include/strDup.cpp"
+Finished building: ../include/strDup.cpp
+ 
+Building file: ../ServerMediaSession/ServerMediaSession.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"ServerMediaSession/ServerMediaSession.d" -MT"ServerMediaSession/ServerMediaSession.d" -o "ServerMediaSession/ServerMediaSession.o" "../ServerMediaSession/ServerMediaSession.cpp"
+Finished building: ../ServerMediaSession/ServerMediaSession.cpp
+ 
+Building file: ../Rtspserver/RTSPCommon.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPCommon.d" -MT"Rtspserver/RTSPCommon.d" -o "Rtspserver/RTSPCommon.o" "../Rtspserver/RTSPCommon.cpp"
+Finished building: ../Rtspserver/RTSPCommon.cpp
+ 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:179:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:200:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:201:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+Finished building: ../Rtspserver/RTSPServer.cpp
+ 
+Building target: RtspServer
+Invoking: GCC C++ Linker
+g++  -o "RtspServer"  ./include/Locale.o ./include/inet.o ./include/strDup.o  ./ServerMediaSession/ServerMediaSession.o  ./Rtspserver/RTSPCommon.o ./Rtspserver/RTSPServer.o   
+/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../lib64/crt1.o：在函数‘_start’中：
+/home/abuild/rpmbuild/BUILD/glibc-2.18/csu/../sysdeps/x86_64/start.S:118：对‘main’未定义的引用
+collect2: error: ld returned 1 exit status
+make: *** [RtspServer] 错误 1
+20:19:30 **** Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:179:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:200:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:201:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+Finished building: ../Rtspserver/RTSPServer.cpp
+ 
+Building target: RtspServer
+Invoking: GCC C++ Linker
+g++  -o "RtspServer"  ./include/Locale.o ./include/inet.o ./include/strDup.o  ./ServerMediaSession/ServerMediaSession.o  ./Rtspserver/RTSPCommon.o ./Rtspserver/RTSPServer.o   
+/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../lib64/crt1.o：在函数‘_start’中：
+/home/abuild/rpmbuild/BUILD/glibc-2.18/csu/../sysdeps/x86_64/start.S:118：对‘main’未定义的引用
+collect2: error: ld returned 1 exit status
+make: *** [RtspServer] 错误 1
+20:19:43 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building target: RtspServer
+Invoking: GCC C++ Linker
+g++  -o "RtspServer"  ./include/Locale.o ./include/inet.o ./include/strDup.o  ./ServerMediaSession/ServerMediaSession.o  ./Rtspserver/RTSPCommon.o ./Rtspserver/RTSPServer.o   
+/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../lib64/crt1.o：在函数‘_start’中：
+/home/abuild/rpmbuild/BUILD/glibc-2.18/csu/../sysdeps/x86_64/start.S:118：对‘main’未定义的引用
+collect2: error: ld returned 1 exit status
+make: *** [RtspServer] 错误 1
+20:20:03 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp:15:78: error: no ‘void RTSPServer::incomingConnectionHandlerRTSP(void*, int)’ member function declared in class ‘RTSPServer’
+ void   RTSPServer::incomingConnectionHandlerRTSP(void* instance, int /*mask*/)
+                                                                              ^
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:188:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:209:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:210:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+make: *** [Rtspserver/RTSPServer.o] 错误 1
+20:20:28 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp:15:78: error: no ‘void RTSPServer::incomingConnectionHandlerRTSP(void*, int)’ member function declared in class ‘RTSPServer’
+ void   RTSPServer::incomingConnectionHandlerRTSP(void* instance, int /*mask*/)
+                                                                              ^
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:188:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:209:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:210:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+make: *** [Rtspserver/RTSPServer.o] 错误 1
+20:21:12 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp:15:78: error: no ‘void RTSPServer::incomingConnectionHandlerRTSP(void*, int)’ member function declared in class ‘RTSPServer’
+ void   RTSPServer::incomingConnectionHandlerRTSP(void* instance, int /*mask*/)
+                                                                              ^
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:188:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:209:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:210:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+make: *** [Rtspserver/RTSPServer.o] 错误 1
+20:21:52 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp:15:78: error: no ‘void RTSPServer::incomingConnectionHandlerRTSP(void*, int)’ member function declared in class ‘RTSPServer’
+ void   RTSPServer::incomingConnectionHandlerRTSP(void* instance, int /*mask*/)
+                                                                              ^
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:188:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:209:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:210:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+make: *** [Rtspserver/RTSPServer.o] 错误 1
+20:23:18 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp:15:78: error: no ‘void RTSPServer::incomingConnectionHandlerRTSP(void*, int)’ member function declared in class ‘RTSPServer’
+ void   RTSPServer::incomingConnectionHandlerRTSP(void* instance, int /*mask*/)
+                                                                              ^
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:188:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:209:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:210:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+make: *** [Rtspserver/RTSPServer.o] 错误 1
+20:23:23 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp:15:76: error: no ‘void RTSPServer::incomingConnectionHandlerRTSP(void*, int)’ member function declared in class ‘RTSPServer’
+ void RTSPServer::incomingConnectionHandlerRTSP(void* instance, int /*mask*/) {
+                                                                            ^
+../Rtspserver/RTSPServer.cpp:20:49: error: no ‘void RTSPServer::incomingConnectionHandlerRTSP1()’ member function declared in class ‘RTSPServer’
+ void RTSPServer::incomingConnectionHandlerRTSP1() {
+                                                 ^
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:188:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:209:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:210:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+make: *** [Rtspserver/RTSPServer.o] 错误 1
+20:25:49 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp:8:76: error: no ‘void RTSPServer::incomingConnectionHandlerRTSP(void*, int)’ member function declared in class ‘RTSPServer’
+ void RTSPServer::incomingConnectionHandlerRTSP(void* instance, int /*mask*/) {
+                                                                            ^
+../Rtspserver/RTSPServer.cpp:13:49: error: no ‘void RTSPServer::incomingConnectionHandlerRTSP1()’ member function declared in class ‘RTSPServer’
+ void RTSPServer::incomingConnectionHandlerRTSP1() {
+                                                 ^
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:189:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:210:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:211:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+make: *** [Rtspserver/RTSPServer.o] 错误 1
+20:26:46 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:182:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:203:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:204:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+Finished building: ../Rtspserver/RTSPServer.cpp
+ 
+Building target: RtspServer
+Invoking: GCC C++ Linker
+g++  -o "RtspServer"  ./include/Locale.o ./include/inet.o ./include/strDup.o  ./ServerMediaSession/ServerMediaSession.o  ./Rtspserver/RTSPCommon.o ./Rtspserver/RTSPServer.o   
+/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../lib64/crt1.o：在函数‘_start’中：
+/home/abuild/rpmbuild/BUILD/glibc-2.18/csu/../sysdeps/x86_64/start.S:118：对‘main’未定义的引用
+collect2: error: ld returned 1 exit status
+make: *** [RtspServer] 错误 1
+20:27:45 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp:8:49: error: no ‘void RTSPServer::incomingConnectionHandlerRTSP1()’ member function declared in class ‘RTSPServer’
+ void RTSPServer::incomingConnectionHandlerRTSP1()
+                                                 ^
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:186:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:207:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:208:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+make: *** [Rtspserver/RTSPServer.o] 错误 1
+20:28:39 **** Incremental Build of configuration Debug for project RtspServer ****
+make all 
+Building file: ../Rtspserver/RTSPServer.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"Rtspserver/RTSPServer.d" -MT"Rtspserver/RTSPServer.d" -o "Rtspserver/RTSPServer.o" "../Rtspserver/RTSPServer.cpp"
+../Rtspserver/RTSPServer.cpp: In member function ‘void RTSPClientConnection::handleRequestBytes(int)’:
+../Rtspserver/RTSPServer.cpp:186:67: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+                                                                   ^
+../Rtspserver/RTSPServer.cpp: In member function ‘virtual void RTSPClientConnection::handleCmd_DESCRIBE(const char*, const char*, const char*)’:
+../Rtspserver/RTSPServer.cpp:207:8: warning: unused variable ‘sdpDescription’ [-Wunused-variable]
+  char* sdpDescription = NULL;
+        ^
+../Rtspserver/RTSPServer.cpp:208:8: warning: unused variable ‘rtspURL’ [-Wunused-variable]
+  char* rtspURL = NULL;
+        ^
+Finished building: ../Rtspserver/RTSPServer.cpp
+ 
+Building target: RtspServer
+Invoking: GCC C++ Linker
+g++  -o "RtspServer"  ./include/Locale.o ./include/inet.o ./include/strDup.o  ./ServerMediaSession/ServerMediaSession.o  ./Rtspserver/RTSPCommon.o ./Rtspserver/RTSPServer.o   
+/usr/lib64/gcc/x86_64-suse-linux/4.8/../../../../lib64/crt1.o：在函数‘_start’中：
+/home/abuild/rpmbuild/BUILD/glibc-2.18/csu/../sysdeps/x86_64/start.S:118：对‘main’未定义的引用
+collect2: error: ld returned 1 exit status
+make: *** [RtspServer] 错误 1

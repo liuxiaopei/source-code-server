@@ -1,0 +1,265 @@
+#include "RTSPServer.h"
+#include "../include/GroupsockHelper.hh"
+
+char const* RTSPServer::allowedCommandNames() {
+	return "OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER";
+}
+
+void RTSPClientConnection::handleCmd_OPTIONS()
+{
+	snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,
+		"RTSP/1.0 200 OK\r\nCSeq: %s\r\n%sPublic: %s\r\n\r\n",
+		fCurrentCSeq, dateHeader(), fOurServer.allowedCommandNames());
+}
+
+void RTSPClientConnection::handleRequestBytes(int newBytesRead) 
+{
+	int numBytesRemaining = 0;
+	++fRecursionCount;
+
+	do 
+	{
+		RTSPClientSession* clientSession = NULL;
+		if (newBytesRead < 0 || (unsigned)newBytesRead > fRequestBufferBytesLeft)
+		{
+#ifdef DEBUG
+			fprintf(stderr, "RTSPClientConnection[%p]::handleRequestBytes() read %d new bytes (of %d); terminating connection!\n", this, newBytesRead, fRequestBufferBytesLeft);
+#endif
+			fIsActive = False;
+			break;
+		}
+
+		Boolean endOfMsg = False;
+		unsigned char* ptr = &fRequestBuffer[fRequestBytesAlreadySeen];
+#ifdef DEBUG
+		ptr[newBytesRead] = '\0';
+		fprintf(stderr, "RTSPClientConnection[%p]::handleRequestBytes() %s %d new bytes:%s\n",
+			this, numBytesRemaining > 0 ? "processing" : "read", newBytesRead, ptr);
+#endif
+		unsigned char* tmpPtr = fLastCRLF + 2;
+		if (tmpPtr < fRequestBuffer)
+		{
+			tmpPtr = fRequestBuffer;
+		}
+
+		//²éÕÒ»»ÐÐ·û.
+		while (tmpPtr < &ptr[newBytesRead - 1])
+		{
+			if (*tmpPtr == '\r' && *(tmpPtr + 1) == '\n')
+			{
+				if (tmpPtr - fLastCRLF == 2)
+				{
+					endOfMsg = True;
+					break;
+				}
+
+				fLastCRLF = tmpPtr;
+			}
+
+			++tmpPtr;
+		}
+
+		fRequestBufferBytesLeft -= newBytesRead;
+		fRequestBytesAlreadySeen += newBytesRead;
+
+		if (!endOfMsg) break; // subsequent reads will be needed to complete the request
+
+		fRequestBuffer[fRequestBytesAlreadySeen] = '\0';
+		char cmdName[RTSP_PARAM_STRING_MAX];
+		char urlPreSuffix[RTSP_PARAM_STRING_MAX];
+		char urlSuffix[RTSP_PARAM_STRING_MAX];
+		char cseq[RTSP_PARAM_STRING_MAX];
+		char sessionIdStr[RTSP_PARAM_STRING_MAX];
+		unsigned contentLength = 0;
+		fLastCRLF[2] = '\0'; // temporarily, for parsing
+
+		Boolean parseSucceed = parseRTSPRequestString((char*)fRequestBuffer, fLastCRLF + 2 - fRequestBuffer, 
+			cmdName, sizeof cmdName,
+			urlPreSuffix, sizeof urlPreSuffix,
+			urlSuffix, sizeof urlSuffix,
+			cseq, sizeof cseq,
+			sessionIdStr, sizeof sessionIdStr,
+			contentLength);
+
+		fLastCRLF[2] = '\r'; // restore its value
+		Boolean playAfterSetup = False;
+
+		if (parseSucceed)
+		{
+#ifdef DEBUG
+			fprintf(stderr, "parseRTSPRequestString() succeeded, returning cmdName \"%s\", urlPreSuffix \"%s\", urlSuffix \"%s\", CSeq \"%s\", Content-Length %u, with %ld bytes following the message.\n", cmdName, urlPreSuffix, urlSuffix, cseq, contentLength, ptr + newBytesRead - (tmpPtr + 2));
+#endif
+
+			if (ptr + newBytesRead < tmpPtr + 2 + contentLength)
+			{
+				break;
+			}
+
+			Boolean const  requestIncludedSessionId = sessionIdStr[0] != '\0';
+			if (requestIncludedSessionId)
+			{
+
+			}
+
+			fCurrentCSeq = cseq;
+			if (strcmp(cmdName, "OPTIONS") == 0)
+			{
+				handleCmd_OPTIONS();
+			}
+			else if (urlPreSuffix[0] == '\0' && urlSuffix[0] == '*' && urlSuffix[1] == '\0')
+			{
+			}
+			else if (strcmp(cmdName, "DESCRIBE"))
+			{
+				handleCmd_DESCRIBE(urlPreSuffix, urlSuffix, (char const*)fRequestBuffer);
+			}
+			else if (strcmp(cmdName, "SETUP"))
+			{
+				if (!requestIncludedSessionId)
+				{
+					u_int32_t sessionId;
+				 do 
+				 {
+					 sessionId = (u_int32_t)our_random32();
+					 sprintf(sessionIdStr, "%08X", sessionId);
+				 } while (sessionId == 0);
+
+				 clientSession = fOurServer.createNewClientSession(sessionId);
+				}
+
+				if (clientSession != NULL){
+					clientSession->handleCmd_SETUP(this, urlPreSuffix, urlSuffix, (char const*)fRequestBuffer);
+					playAfterSetup = clientSession->fStreamAfterSETUP;
+				}
+				else{
+					handleCmd_notSupported();
+				}
+			}
+			else if (strcmp(cmdName, "TEARDOWN") == 0
+				|| strcmp(cmdName, "PLAY")
+				|| strcmp(cmdName, "PAUSE")
+				|| strcmp(cmdName, "GET_PARAMETER")
+				|| strcmp(cmdName, "SET_PARAMETER") == 0){
+
+					if (clientSession != NULL){
+						clientSession->handleCmd_withinSession(this, cmdName, urlPreSuffix, 
+							urlSuffix, (char const*)fRequestBuffer);
+					}
+					else{
+						handleCmd_notFound();
+					}
+			}
+			else if(strcmp(cmdName, "REGISTER") == 0){
+
+			}
+			else{
+				handleCmd_notSupported();
+			}
+			
+		}
+		else{
+			//http½âÎö.
+		}
+
+#ifdef DEBUG
+		fprintf(stderr, "sending response: %s", fResponseBuffer);
+#endif
+
+		send(fClientOutputSocket, (char const*)fResponseBuffer, strlen((char*)fResponseBuffer), 0);
+
+		if(playAfterSetup){
+			clientSession->handleCmd_withinSession(this, cmdName, urlPreSuffix, urlSuffix, (char const*)fRequestBuffer);
+		}
+			
+		unsigned requestSize = (fLastCRLF+4-fRequestBuffer) + contentLength;
+		numBytesRemaining = fRequestBytesAlreadySeen - requestSize;
+		resetRequestBuffer(); // to prepare for any subsequent request	
+		
+		if (numBytesRemaining > 0){
+			memmove(fRequestBuffer, (const void*)fRequestBuffer[requestSize], numBytesRemaining);
+			newBytesRead = numBytesRemaining;
+		}
+	} while (numBytesRemaining > 0);
+	
+	//´íÎó.
+	if(!fIsActive){
+		
+	}
+}
+
+void RTSPClientConnection::handleCmd_bad()
+{
+	snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,
+		"RTSP/1.0 400 Bad Request\r\n%sAllow: %s\r\n\r\n",
+		dateHeader(), fOurServer.allowedCommandNames());
+}
+
+void RTSPClientConnection::handleCmd_DESCRIBE(char const* urlPreSuffix, char const* urlSuffix, 
+											  char const* fullRequestStr)
+{
+	char* sdpDescription = NULL;
+	char* rtspURL = NULL;
+
+	do{
+		char urlTotalSuffix[RTSP_PARAM_STRING_MAX];
+		if (strlen(urlPreSuffix) + strlen(urlSuffix) + 2 > sizeof urlTotalSuffix) 
+		{
+			handleCmd_bad();
+			break;
+		}
+
+		urlTotalSuffix[0] = '\0';
+		if (urlPreSuffix[0] != '\0')
+		{
+			strcat(urlTotalSuffix, urlPreSuffix);
+			strcat(urlTotalSuffix, "/");
+		}
+		strcat(urlTotalSuffix, urlSuffix);
+	}while (0);
+}
+
+void RTSPClientConnection::resetRequestBuffer() {
+	fRequestBytesAlreadySeen = 0;
+	fRequestBufferBytesLeft = sizeof fRequestBuffer;
+	fLastCRLF = &fRequestBuffer[-3]; // hack: Ensures that we don't think we have end-of-msg if the data starts with <CR><LF>
+	fBase64RemainderCount = 0;
+}
+
+void RTSPClientSession::handleCmd_withinSession(RTSPClientConnection* ourClientConnection, 
+												char const* cmdName, char const* urlPreSuffix, 
+												char const* urlSuffix, char const* fullRequestStr)
+{
+	if (fOurServerMediaSession == NULL)
+	{
+		ourClientConnection->handleCmd_notSupported();
+		return;
+	}
+	
+	if (urlSuffix[0] == '\0' || 
+		strcmp(fOurServerMediaSession->streamName(), urlSuffix) != 0)
+	{
+		ourClientConnection->handleCmd_notSupported();
+		return;
+	}
+	
+	if (strcmp(cmdName, "TEARDOWN"))
+	{
+		handleCmd_TEARDOWN(ourClientConnection, NULL);
+	}
+	else if (strcmp(cmdName, "PLAY"))
+	{
+		handleCmd_PLAY(ourClientConnection, NULL, fullRequestStr);
+	}
+	else if (strcmp(cmdName, "PAUSE"))
+	{
+		handleCmd_PAUSE(ourClientConnection, NULL);
+	}
+	else if (strcmp(cmdName, "GET_PARAMETER") == 0) 
+	{
+		handleCmd_GET_PARAMETER(ourClientConnection, NULL, fullRequestStr);
+	}
+	else if (strcmp(cmdName, "SET_PARAMETER") == 0) 
+	{
+		handleCmd_SET_PARAMETER(ourClientConnection, NULL, fullRequestStr);
+	}
+}

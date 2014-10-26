@@ -5,12 +5,25 @@ char const* RTSPServer::allowedCommandNames() {
 	return "OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER";
 }
 
+void RTSPServer::incomingConnectionHandlerRTSP(void* instance, int)
+{
+	RTSPServer* server = (RTSPServer*)instance;
+	server->incomingConnectionHandlerRTSP1();
+}
+
+void RTSPServer::incomingConnectionHandlerRTSP1()
+{
+
+}
+
+
 void RTSPClientConnection::handleCmd_OPTIONS()
 {
 	snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,
 		"RTSP/1.0 200 OK\r\nCSeq: %s\r\n%sPublic: %s\r\n\r\n",
 		fCurrentCSeq, dateHeader(), fOurServer.allowedCommandNames());
 }
+
 
 void RTSPClientConnection::handleRequestBytes(int newBytesRead) 
 {
@@ -42,7 +55,7 @@ void RTSPClientConnection::handleRequestBytes(int newBytesRead)
 			tmpPtr = fRequestBuffer;
 		}
 
-		//²éÕÒ»»ĞĞ·û.
+		//æŸ¥æ‰¾ç»“æŸç¬¦å·.
 		while (tmpPtr < &ptr[newBytesRead - 1])
 		{
 			if (*tmpPtr == '\r' && *(tmpPtr + 1) == '\n')
@@ -158,7 +171,7 @@ void RTSPClientConnection::handleRequestBytes(int newBytesRead)
 			
 		}
 		else{
-			//http½âÎö.
+			//httpï¿½ï¿½ï¿½ï¿½.
 		}
 
 #ifdef DEBUG
@@ -181,7 +194,7 @@ void RTSPClientConnection::handleRequestBytes(int newBytesRead)
 		}
 	} while (numBytesRemaining > 0);
 	
-	//´íÎó.
+	//ï¿½ï¿½ï¿½ï¿½.
 	if(!fIsActive){
 		
 	}
