@@ -44,7 +44,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
@@ -60,7 +60,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="ws2_32.lib libuv.lib Psapi.lib IPHLPAPI.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories=".\libuv\lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -237,6 +239,22 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="NetServer"
+			>
+			<File
+				RelativePath=".\NetServer\TCPServer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NetServer\TCPServer.h"
+				>
+			</File>
+		</Filter>
+		<File
+			RelativePath=".\main.cpp"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

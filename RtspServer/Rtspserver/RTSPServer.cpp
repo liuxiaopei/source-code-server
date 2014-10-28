@@ -1,5 +1,48 @@
+#include "../NetServer/TCPServer.h"
 #include "RTSPServer.h"
 #include "../include/GroupsockHelper.hh"
+
+
+RTSPServer::RTSPServer(TCPServer* tcpServer)
+{
+	pTcpServer = tcpServer;
+	pTcpServer->SetConnectCallback(incomingConnectionHandlerRTSPEx, this);
+}
+
+RTSPServer* RTSPServer::createNew(u_int32_t rtspPort, const char* localIpAddress)
+{
+	TCPServer* tcpServer = new TCPServer();
+	tcpServer->SetNetServerInfo(rtspPort, localIpAddress);
+	if (tcpServer->InitNetServer() != 0)
+	{
+		return NULL;
+	}
+	
+	return new RTSPServer(tcpServer);
+}
+
+RTSPClientSession* RTSPServer::createNewClientSession(u_int32_t sessionId)
+{
+	return NULL;
+}
+
+void RTSPServer::incomingConnectionHandlerRTSPEx(uv_stream_t* stream)
+{
+	STREAM_PARAM* pStreamParam = (STREAM_PARAM*)stream->data;
+	
+}
+
+void RTSPServer::incomingConnectionHandler(uv_stream_t* stream)
+{
+	
+}
+
+void  RTSPServer::incomingConnectionHandlerRTSPEx(uv_stream_t* stream, void* userData)
+{
+	RTSPServer* server = (RTSPServer*)userData;
+	server->incomingConnectionHandlerRTSPEx(stream);
+}
+
 
 char const* RTSPServer::allowedCommandNames() {
 	return "OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER";
@@ -12,6 +55,53 @@ void RTSPServer::incomingConnectionHandlerRTSP(void* instance, int)
 }
 
 void RTSPServer::incomingConnectionHandlerRTSP1()
+{
+
+}
+
+void RTSPClientConnection::handleCmd_GET_PARAMETER(char const* fullRequestStr) // when operating on the entire server
+{
+
+}
+void RTSPClientConnection::handleCmd_SET_PARAMETER(char const* fullRequestStr)
+{
+
+}
+
+
+void RTSPClientConnection::handleCmd_REGISTER(char const* url, char const* urlSuffix, char const* fullRequestStr,
+								Boolean reuseConnection, Boolean deliverViaTCP, char const* proxyURLSuffix)
+{
+
+}
+
+void RTSPClientConnection::handleHTTPCmd_notSupported()
+{
+
+}
+
+void RTSPClientConnection::handleHTTPCmd_notFound()
+{
+
+}
+
+void RTSPClientConnection::handleHTTPCmd_OPTIONS()
+{
+
+}
+
+void RTSPClientConnection::handleHTTPCmd_TunnelingGET(char const* sessionCookie)
+{
+
+}
+
+Boolean RTSPClientConnection::handleHTTPCmd_TunnelingPOST(char const* sessionCookie, unsigned char const* extraData, 
+											unsigned extraDataSize)
+{
+	return True;
+}
+
+void RTSPClientConnection::handleHTTPCmd_StreamingGET(char const* urlSuffix, char const* fullRequestStr)
 {
 
 }
@@ -238,6 +328,33 @@ void RTSPClientConnection::resetRequestBuffer() {
 	fBase64RemainderCount = 0;
 }
 
+void RTSPClientConnection::handleCmd_notSupported()
+{
+
+}
+
+void RTSPClientConnection::handleCmd_unsupportedTransport(void)
+{
+
+}
+
+Boolean RTSPClientConnection::parseHTTPRequestString(char* resultCmdName, unsigned resultCmdNameMaxSize,
+									   char* urlSuffix, unsigned urlSuffixMaxSize,
+									   char* sessionCookie, unsigned sessionCookieMaxSize,
+									   char* acceptStr, unsigned acceptStrMaxSize)
+{
+	return True;
+}
+void RTSPClientConnection::handleCmd_sessionNotFound(void)
+{
+
+}
+
+void RTSPClientConnection::handleCmd_notFound()
+{
+
+}
+
 void RTSPClientSession::handleCmd_withinSession(RTSPClientConnection* ourClientConnection, 
 												char const* cmdName, char const* urlPreSuffix, 
 												char const* urlSuffix, char const* fullRequestStr)
@@ -275,4 +392,10 @@ void RTSPClientSession::handleCmd_withinSession(RTSPClientConnection* ourClientC
 	{
 		handleCmd_SET_PARAMETER(ourClientConnection, NULL, fullRequestStr);
 	}
+}
+
+RTSPClientConnection::RTSPClientConnection(RTSPServer& ourServer, uv_stream_t* stream) : fOurServer(ourServer)
+{
+	socketStream = stream;
+	fOurServer.connectionMap.insert(make_pair(this, this));
 }

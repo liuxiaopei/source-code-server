@@ -1,6 +1,11 @@
+#ifndef RTSPSERVER_H_
+#define RTSPSERVER_H_
+
 #include "../include/NetCommon.h"
 #include "../ServerMediaSession/ServerMediaSession.h"
 #include "RTSPCommon.hh"
+#include <map>
+using namespace std;
 
 #ifndef RTSP_BUFFER_SIZE
 #define RTSP_BUFFER_SIZE 10000 // for incoming requests, and outgoing responses
@@ -11,8 +16,10 @@ class RTSPClientConnection;
 class RTSPServer	
 {
 public:
-	RTSPServer();
-	virtual ~RTSPServer();
+	static RTSPServer* createNew(u_int32_t rtspPort, const char* localIpAddress);
+public:
+	RTSPServer(TCPServer* tcpServer);
+	virtual ~RTSPServer(){};
 
 	// used to implement "RTSPClientConnection::handleCmd_OPTIONS()"
 	 virtual char const* allowedCommandNames();
@@ -21,9 +28,18 @@ protected:
 	virtual RTSPClientSession* createNewClientSession(u_int32_t sessionId);
 
 private:
-	  static void incomingConnectionHandlerRTSP(void*, int /*mask*/);
-	  void incomingConnectionHandlerRTSP1();
+	static void  incomingConnectionHandlerRTSPEx(uv_stream_t* stream, void* userData);
+	void incomingConnectionHandlerRTSPEx(uv_stream_t* stream);
 
+	static void incomingConnectionHandlerRTSP(void*, int /*mask*/);
+	void incomingConnectionHandlerRTSP1();
+
+	void incomingConnectionHandler(uv_stream_t* stream);
+
+private:
+	TCPServer*	pTcpServer;
+	
+	std::map<RTSPClientConnection*, RTSPClientConnection*> connectionMap;
 protected:
 	friend class RTSPClientConnection;
 };
@@ -32,7 +48,9 @@ class RTSPClientConnection
 {
 public:
 	RTSPClientConnection(RTSPServer& ourServer, int clientSocket, struct sockaddr_in clientAddr);
-	virtual ~RTSPClientConnection();
+	RTSPClientConnection(RTSPServer& ourServer, uv_stream_t* stream);
+
+	virtual ~RTSPClientConnection(){};
 
 protected:
 	friend class RTSPClientSession;
@@ -72,6 +90,7 @@ public:
 protected:
 	friend class RTSPServer;
 	RTSPServer& fOurServer;
+	uv_stream_t* socketStream;
 
 	unsigned char fResponseBuffer[RTSP_BUFFER_SIZE];
     unsigned char fRequestBuffer[RTSP_BUFFER_SIZE];
@@ -124,3 +143,5 @@ public:
 	
 	ServerMediaSession* fOurServerMediaSession;
 };
+
+#endif

@@ -8,7 +8,9 @@
 #include "TCPServer.h"
 #include <string.h>
 
-TCPServer::TCPServer() {
+TCPServer::TCPServer():pConnectionCb(NULL), pUserData(NULL),
+	m_uvLoop(NULL)
+{
 	// TODO Auto-generated constructor stub
 
 }
@@ -55,6 +57,11 @@ void TCPServer::after_read(uv_stream_t* stream,
                         const uv_buf_t* buf)
 {
 
+	 STREAM_PARAM* pStreamParam = (STREAM_PARAM*)stream->data;
+	 if (pStreamParam->pReadCallBack)
+	 {
+		 pStreamParam->pReadCallBack(stream,  nread, buf);
+	 }
 }
 
 void TCPServer::processConnection(uv_stream_t *server, int status)
