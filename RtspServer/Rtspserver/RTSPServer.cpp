@@ -7,7 +7,7 @@ RTSPServer::RTSPServer(TCPServer* tcpServer)
 {
 	pTcpServer = tcpServer;
 	pTcpServer->SetConnectCallback(incomingConnectionHandlerRTSPEx, this);
-//ffffffffffffffffffffffffff
+//ffffffffffffffffffffffffff1
 }
 
 RTSPServer* RTSPServer::createNew(u_int32_t rtspPort, const char* localIpAddress)
