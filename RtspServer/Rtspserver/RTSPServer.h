@@ -45,7 +45,7 @@ protected:
 };
 //ffffffffffffffffffffffffff1
 class RTSPClientConnection
-{
+{1111
 public:
 	RTSPClientConnection(RTSPServer& ourServer, int clientSocket, struct sockaddr_in clientAddr);
 	RTSPClientConnection(RTSPServer& ourServer, uv_stream_t* stream);
