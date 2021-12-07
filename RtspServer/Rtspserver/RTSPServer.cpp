@@ -56,7 +56,7 @@ void RTSPServer::incomingConnectionHandlerRTSP(void* instance, int)
 
 void RTSPServer::incomingConnectionHandlerRTSP1()
 {
-
+	//test
 }
 
 void RTSPClientConnection::handleCmd_GET_PARAMETER(char const* fullRequestStr) // when operating on the entire server
